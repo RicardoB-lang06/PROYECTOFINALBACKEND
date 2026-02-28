@@ -7,16 +7,16 @@ const { CurrencyIntegration } = require('../integration/currency.integration');
 const repo = new DeduccionesRepository();
 
 const create = asyncHandler(async (req, res) => {
+    const monto_base = Number(req.body.monto_original || req.body.monto || req.body.monto_mxn || 0);
+    const moneda_recibida = req.body.moneda || 'MXN';
+
     const validacion = validarDeduccion(req.body);
     if (!validacion.ok) return res.status(400).json({ error: validacion.error });
 
     let dataToSave = { ...validacion.data };
     console.log(`payload validado:`, dataToSave);
 
-    const monto_base = Number(req.body.monto_original || req.body.monto || req.body.monto_mxn || 0);
-    const moneda = req.body.moneda || 'MXN';
-
-    if (moneda.toUpperCase() === 'USD') {
+    if (moneda_recibida.toUpperCase() === 'USD') {
         try {
             console.log(`Consultando API para USD...`);
             const tipo_cambio = await CurrencyIntegration.getUsdToMxnRate();
