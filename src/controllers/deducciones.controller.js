@@ -2,7 +2,6 @@ const { DeduccionesRepository } = require('../repositories/deducciones.repositor
 const { validarDeduccion } = require('../domain/deducciones.rules');
 const { asyncHandler } = require('../utils/asyncHandler');
 
-// 🚩 1. IMPORTAR LA INTEGRACIÓN DE DIVISAS (El héroe anónimo)
 const { CurrencyIntegration } = require('../integration/currency.integration');
 
 const repo = new DeduccionesRepository();
@@ -15,22 +14,20 @@ const create = asyncHandler(async (req, res) => {
     console.log(`payload validado:`, dataToSave);
 
     const monto_base = Number(req.body.monto_original || req.body.monto || req.body.monto_mxn || 0);
+    const moneda = req.body.moneda || 'MXN';
 
-    if (dataToSave.moneda && dataToSave.moneda.toUpperCase() === 'USD') {
+    if (moneda.toUpperCase() === 'USD') {
         try {
-            console.log(`COonsultando API`);
+            console.log(`Consultando API para USD...`);
             const tipo_cambio = await CurrencyIntegration.getUsdToMxnRate();
             
-            dataToSave.tipo_de_cambio_oficial = tipo_cambio;
             dataToSave.monto_mxn = monto_base * Number(tipo_cambio);
-            console.log(`Éxito: $${monto_base} ${dataToSave.monto_mxn} ${tipo_cambio}`);
+            console.log(`Éxito: $${monto_base} USD -> $${dataToSave.monto_mxn} MXN a TC: ${tipo_cambio}`);
         } catch (error) {
             console.warn(`Error en API: ${error.message}`);
-            dataToSave.tipo_de_cambio_oficial = 18.50;
             dataToSave.monto_mxn = monto_base * 18.50;
         }
     } else {
-        dataToSave.tipo_de_cambio_oficial = 1;
         dataToSave.monto_mxn = monto_base;
     }
 
