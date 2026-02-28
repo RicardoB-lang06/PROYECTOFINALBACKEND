@@ -17,6 +17,27 @@ class IngresosRepository {
         return r.rows[0] || null;
     }
 
+    async findAllByUserPaginated(user_id, limit, offset) {
+        const countResult = await pool.query(
+            'SELECT COUNT(*) FROM ingresos WHERE user_id = $1',
+            [user_id]
+        );
+        const totalRegistros = parseInt(countResult.rows[0].count, 10);
+
+        const r = await pool.query(
+            `SELECT * FROM ingresos 
+             WHERE user_id = $1 
+             ORDER BY fecha_recepcion DESC 
+             LIMIT $2 OFFSET $3`,
+            [user_id, limit, offset]
+        );
+
+        return {
+            totalRegistros,
+            data: r.rows
+        };
+    }
+
     async findAllByUser(user_id) {
         const r = await pool.query(
             'SELECT * FROM ingresos WHERE user_id = $1 ORDER BY fecha_recepcion DESC',

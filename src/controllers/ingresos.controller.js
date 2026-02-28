@@ -78,4 +78,28 @@ const remove = asyncHandler(async (req, res) => {
     res.status(204).json({ ok: true, message: 'Ingreso eliminado correctamente' });
 });
 
-module.exports = { create, getAll, getById, update, remove };
+const getAllIngresos = asyncHandler(async (req, res) => {
+    const user_id = req.user.id;
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+
+    const offset = (page - 1) * limit;
+
+    const resultado = await repo.findAllByUserPaginated(user_id, limit, offset);
+
+    const totalPages = Math.ceil(resultado.totalRegistros / limit);
+
+    res.json({
+        ok: true,
+        metadata: {
+            totalRegistros: resultado.totalRegistros,
+            totalPages: totalPages,
+            currentPage: page,
+            limit: limit
+        },
+        data: resultado.data
+    });
+});
+
+module.exports = { create, getAll, getById, update, remove, getAllIngresos };
