@@ -14,7 +14,7 @@ const create = asyncHandler(async (req, res) => {
     let dataToSave = { ...validacion.data };
     console.log(`payload validado:`, dataToSave);
 
-    const monto_base = Number(dataToSave.monto_original || dataToSave.monto || 0);
+    const monto_base = Number(req.body.monto_original || req.body.monto || req.body.monto_mxn || 0);
 
     if (dataToSave.moneda && dataToSave.moneda.toUpperCase() === 'USD') {
         try {
