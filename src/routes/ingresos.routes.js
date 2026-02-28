@@ -8,6 +8,7 @@ router.use(authMiddleware);
 
 router.post('/', controller.create);
 router.get('/', controller.getAll);
+router.get('/', authMiddleware, getAllIngresos);
 router.get('/:id', controller.getById);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.remove);
