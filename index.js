@@ -44,6 +44,10 @@ app.get('/', (req, res) => {
   res.send('API OK');
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.get('/health/db', async (req, res) => {
   try {
     const r = await pool.query('select 1 as ok');
