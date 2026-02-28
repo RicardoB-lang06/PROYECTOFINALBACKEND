@@ -1,0 +1,11 @@
+hay que usar los comandos:
+npm init
+npm install express
+npm install --save-dev nodemon
+npm install pg (sirve para conecgarse a supabase y usar peticiones sql)
+npm i dotenv 
+npm i --save-dev jest
+npm install cors (verificador de acceso a los sistemas)
+npm install jsonwebtoken
+npm install bcryptjs
+npm i express-rate-limit
