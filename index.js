@@ -22,7 +22,8 @@ app.use(limiter);
 const allowed = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://dfs-front.vercel.app'
+  'https://dfs-front.vercel.app',
+  'https://proyectofinalbackend-ac9u.onrender.com'
 ];
 
 app.use(cors({
