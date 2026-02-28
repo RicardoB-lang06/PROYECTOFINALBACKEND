@@ -58,7 +58,31 @@ const getById = asyncHandler(async (req, res) => {
 
 const update = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const actualizado = await repo.update(id, req.user.id, req.body);
+    
+    const { monto_original, moneda, fuente, fecha_recepcion } = req.body;
+    
+    let dataToUpdate = { monto_original, moneda, fuente, fecha_recepcion };
+
+    if (monto_original !== undefined && moneda !== undefined) {
+        let tipo_cambio = 1;
+        let monto_mxn = monto_original;
+
+        if (moneda.toUpperCase() === 'USD') {
+            try {
+                tipo_cambio = await CurrencyIntegration.getUsdToMxnRate();
+                monto_mxn = monto_original * tipo_cambio;
+            } catch (error) {
+                console.warn(`Error en API de divisas durante update: ${error.message}`);
+                tipo_cambio = 18.50;
+                monto_mxn = monto_original * tipo_cambio;
+            }
+        }
+
+        dataToUpdate.tipo_de_cambio_oficial = tipo_cambio;
+        dataToUpdate.monto_mxn = monto_mxn;
+    }
+
+    const actualizado = await repo.update(id, req.user.id, dataToUpdate);
     
     if (!actualizado) {
         return res.status(404).json({ error: 'Ingreso no encontrado o no tienes permisos' });
