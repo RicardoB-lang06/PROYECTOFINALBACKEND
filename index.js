@@ -8,7 +8,7 @@ const { router: ingresosRouter } = require('./src/routes/ingresos.routes');
 const { router: deduccionesRouter } = require('./src/routes/deducciones.routes');
 const { router: taxRouter } = require('./src/routes/tax.routes');
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 const app = express();
 
 const limiter = rateLimit({
