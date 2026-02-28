@@ -8,7 +8,7 @@ const { router: ingresosRouter } = require('./src/routes/ingresos.routes');
 const { router: deduccionesRouter } = require('./src/routes/deducciones.routes');
 const { router: taxRouter } = require('./src/routes/tax.routes');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 const limiter = rateLimit({
@@ -69,6 +69,6 @@ app.get('/privado', authMiddleware, (req, res) => {
 const { errorHandler } = require('./src/middleware/error.middleware');
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Servidor Corriendo en el puerto ${PORT} TODO CHIDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor corriendo ${PORT}`);
 });
