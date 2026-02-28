@@ -22,7 +22,9 @@ app.use(limiter);
 const allowed = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://proyectofinalfrontend-seven.vercel.app'
+  'https://proyectofinalfrontend-seven.vercel.app',
+  'https://proyectofinalfrontend-3v1y6lmjz-ricardob-lang06s-projects.vercel.app',
+  'https://proyectofinalfrontend-ricardob-lang06s-projects.vercel.app'
 ];
 
 app.use(cors({
